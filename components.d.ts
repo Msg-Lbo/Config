@@ -9,8 +9,16 @@ declare module 'vue' {
   export interface GlobalComponents {
     Home: typeof import('./src/components/Home.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
-    NFloatButton: typeof import('naive-ui')['NFloatButton']
+    NCollapse: typeof import('naive-ui')['NCollapse']
+    NCollapseItem: typeof import('naive-ui')['NCollapseItem']
+    NDivider: typeof import('naive-ui')['NDivider']
+    NH1: typeof import('naive-ui')['NH1']
+    NInput: typeof import('naive-ui')['NInput']
+    NInputNumber: typeof import('naive-ui')['NInputNumber']
+    NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSpace: typeof import('naive-ui')['NSpace']
+    NSwitch: typeof import('naive-ui')['NSwitch']
     NTable: typeof import('naive-ui')['NTable']
+    NTag: typeof import('naive-ui')['NTag']
   }
 }
