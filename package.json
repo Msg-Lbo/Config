@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
+    "build": "vue-tsc -b && vite build && node build.js",
     "preview": "vite preview"
   },
   "dependencies": {
     "@types/node": "^22.0.0",
+    "archiver": "^7.0.1",
     "axios": "^1.7.2",
     "vue": "^3.4.31"
   },

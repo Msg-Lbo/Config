@@ -46,8 +46,16 @@ export default defineConfig({
             }
         }
     },
-    base: './',
+    base: '/',
     build: {
         outDir: './app/dist',
+        rollupOptions: {
+            // 输出文件名
+            output: {
+                entryFileNames: 'assets/[name].js',
+                chunkFileNames: 'assets/[name].js',
+                assetFileNames: 'assets/[name].[ext]'
+            }
+        }
     }
 });
