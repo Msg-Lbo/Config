@@ -37,4 +37,19 @@ export default defineConfig({
   resolve: {
     alias
   },
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    proxy: {
+      '/webui/api': {
+        target: 'http://127.0.0.1:7897',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/webui\/api/, '')
+      }
+    }
+  },
+  base: './',
+  build: {
+    outDir: './app/dist',
+  }
 })

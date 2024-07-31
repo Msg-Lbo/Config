@@ -11,14 +11,15 @@ declare module 'vue' {
     NButton: typeof import('naive-ui')['NButton']
     NCollapse: typeof import('naive-ui')['NCollapse']
     NCollapseItem: typeof import('naive-ui')['NCollapseItem']
-    NDivider: typeof import('naive-ui')['NDivider']
+    NColorPicker: typeof import('naive-ui')['NColorPicker']
+    NFormItem: typeof import('naive-ui')['NFormItem']
     NH1: typeof import('naive-ui')['NH1']
     NInput: typeof import('naive-ui')['NInput']
     NInputNumber: typeof import('naive-ui')['NInputNumber']
+    NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSpace: typeof import('naive-ui')['NSpace']
     NSwitch: typeof import('naive-ui')['NSwitch']
-    NTable: typeof import('naive-ui')['NTable']
     NTag: typeof import('naive-ui')['NTag']
   }
 }
