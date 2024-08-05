@@ -175,12 +175,14 @@
       <n-button class="mt-[10px]" type="warning" @click="handleDefault"> 恢复默认 </n-button>
       <n-button class="mt-[10px]" type="success" @click="saveConfig"> 保存一下 </n-button>
     </n-space>
+
   </main>
 </template>
 
 <script setup lang="ts">
 import { configList, type ConfigItem } from "@/config/config";
 import { getConfig, updateConfig } from "@/apis/config";
+
 
 const list = ref<ConfigItem[]>(configList);
 const perviewList = ref<ConfigItem[]>([]);
