@@ -1,8 +1,8 @@
 <template>
-  <main class="w-screen h-screen bg-gray-300">
-    <n-message-provider>
+  <main class="min-h-screen w-full h-full bg-gray-300">
+    <n-notification-provider>
       <home></home>
-    </n-message-provider>
+    </n-notification-provider>
   </main>
 </template>
 <script setup lang="ts">

@@ -10,14 +10,14 @@ interface ConfigItem {
 const configList: ConfigItem[] = [
     {
         key: 'PORT',
-        value: 7897,
+        value: 8000,
         description: "配置 Nonebot 监听的端口",
         type: "int",
         zh_CN: "配置 Nonebot 监听的端口"
     },
     {
         key: 'HOST',
-        value: "0.0.0.0",
+        value: "127.0.0.1",
         description: "配置 Nonebot 监听的 IP 地址",
         type: "str",
         zh_CN: "配置 Nonebot 监听的 IP 地址"
@@ -30,15 +30,22 @@ const configList: ConfigItem[] = [
         zh_CN: "超级用户"
     },
     {
+        key: 'ADMIN_SUPERUSERS',
+        value: true,
+        description: "是否将所有的管理员视为超级用户。开启填写 true，关闭请填写 false。",
+        type: "bool",
+        zh_CN: "是否将所有的管理员视为超级用户"
+    },
+    {
         key: "COMMAND_SEP",
-        value: [],
+        value: [" "],
         description: "指令分隔符,不知道怎么用就不填",
         type: "array",
         zh_CN: "指令分隔符"
     },
     {
         key: "COMMAND_START",
-        value: [],
+        value: ["."],
         description: "配置 Nonebot 命令起始字符",
         type: "array",
         zh_CN: "命令起始字符"
@@ -88,14 +95,14 @@ const configList: ConfigItem[] = [
     },
     {
         key: "SYNC_ALL_GAME_MESSAGE",
-        value: false,
+        value: true,
         description: "是否转发所有在服务器内发送的消息到 QQ 群",
         type: "bool",
         zh_CN: "转发所有游戏内消息"
     },
     {
         key: "SYNC_MESSAGE_BETWEEN_SERVERS",
-        value: false,
+        value: true,
         description: "是否把服务器内的消息转发到其他的服务器。",
         type: "bool",
         zh_CN: "转发服务器间消息"
@@ -117,14 +124,14 @@ const configList: ConfigItem[] = [
     },
     {
         key: "BROADCAST_SERVER",
-        value: false,
+        value: true,
         description: "是否播报服务器开启/关闭（播报到其他服务器和 QQ 群）。",
         type: "bool",
         zh_CN: "播报服务器状态"
     },
     {
         key: "BROADCAST_PLAYER",
-        value: false,
+        value: true,
         description: "是否播报玩家进入/离开服务器",
         type: "bool",
         zh_CN: "播报玩家状态"
@@ -144,22 +151,22 @@ const configList: ConfigItem[] = [
         zh_CN: "Command 指令的黑名单"
     },
     {
-        key: "SERVER_WATCHER_UPDATE_INTERVAL",
-        value: 0,
+        key: "SERVER_MEMORY_UPDATE_INTERVAL",
+        value: 5,
         description: "更新服务器信息的间隔时间，单位为分钟。",
         type: "int",
         zh_CN: "更新服务器信息的间隔时间"
     },
     {
-        key: "SERVER_WATCHER_MAX_CACHE",
-        value: 0,
-        description: "服务器信息的缓存时间，为几个单位（前面的 SERVER_WATCHER_UPDATE_INTERVAL 为一个单位）。超过这个时间的服务器信息将会被删除。",
+        key: "SERVER_MEMORY_MAX_CACHE",
+        value: 200,
+        description: "服务器信息的缓存时间，为几个单位（前面的 SERVER_MEMORY_UPDATE_INTERVAL 为一个单位）。超过这个时间的服务器信息将会被删除。",
         type: "int",
         zh_CN: "服务器信息的缓存时间"
     },
     {
         key: "WHITELIST_COMMAND",
-        value: "",
+        value: "whitelist",
         description: "白名单的指令，默认为 whitelist 指令。若填写为 whitelist 时，则添加白名单指令为 whitelist add，删除白名单指令为 whitelist remove，其他指令同理。",
         type: "str",
         zh_CN: "白名单的指令"
@@ -187,7 +194,7 @@ const configList: ConfigItem[] = [
     },
     {
         key: "QQ_BOUND_MAX_NUMBER",
-        value: 0,
+        value: 1,
         description: "绑定 QQ 号的最大数量，如若设置 0 则表示不限制。若你只想一个 QQ 号绑定一个 Minecraft 账号，请将 QQ_BOUND_MAX_NUMBER 设置为 1。",
         type: "int",
         zh_CN: "绑定 QQ 号的最大数量"

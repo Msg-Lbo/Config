@@ -6,29 +6,35 @@ import archiver from 'archiver';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const distDir =  path.join(__dirname, 'app/dist');
+const distDir = path.join(__dirname, 'app/dist');
 const outputDir = path.join(__dirname, 'output');
+const projectDir = "G:/projects/BotServer/BotServer/Resources/WebUi";
+
+// 复制一份dist到项目目录
+fs.rmSync(projectDir + '*', { recursive: true, force: true });
+fs.cpSync(distDir, projectDir, { recursive: true });
+
 
 // 确保输出目录存在
 if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
 }
 
-fs.readdir(distDir, (err, files) => {
+// 文件名年月日时分,不足补零
+const now = new Date();
+const year = now.getFullYear();
+const month = (now.getMonth() + 1).toString().padStart(2, '0');
+const day = now.getDate().toString().padStart(2, '0');
+const hour = now.getHours().toString().padStart(2, '0');
+const minute = now.getMinutes().toString().padStart(2, '0');
+const fileName = `${year}${month}${day}${hour}${minute}.zip`;
+const outputFilePath = path.join(outputDir, fileName);
+
+fs.readdir(distDir, async (err, files) => {
     if (err) {
         console.error('无法读取dist目录:', err);
         return;
     }
-    // 文件名年月日时分,不足补零
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0');
-    const day = now.getDate().toString().padStart(2, '0');
-    const hour = now.getHours().toString().padStart(2, '0');
-    const minute = now.getMinutes().toString().padStart(2, '0');
-    const fileName = `${year}${month}${day}${hour}${minute}.zip`;
-    const outputFilePath = path.join(outputDir, fileName);
-
     // 确保输出文件存在
     fs.open(outputFilePath, 'w', (err, fd) => {
         if (err) {
@@ -55,11 +61,16 @@ fs.readdir(distDir, (err, files) => {
         console.log('压缩完成');
     });
 
+
     archive.on('error', function (err) {
         throw err;
     });
 
     archive.pipe(output);
     archive.directory(distDir, false);
-    archive.finalize();
+    await archive.finalize();
 });
+
+
+
+

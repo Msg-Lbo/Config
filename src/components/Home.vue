@@ -13,7 +13,6 @@
                 :title="item.zh_CN"
                 :name="index"
               >
-              <!--  -->
                 <template #header-extra>
                   <!-- 布尔类型 点击切换开关 -->
                   <section
@@ -99,6 +98,18 @@
                       :show-button="false"
                     />
                     <n-input
+                      v-else-if="
+                        item.key === 'COMMAND_SEP' ||
+                        item.key === 'COMMAND_START' ||
+                        item.key === 'COMMAND_MINECRAFT_BLACKLIST' ||
+                        item.key === 'COMMAND_MINECRAFT_WHITELIST'
+                      "
+                      class="flex-1"
+                      v-model:value="item.value[arrayIndex]"
+                      size="small"
+                      :show-button="false"
+                    />
+                    <n-input
                       v-else
                       type="text"
                       :allow-input="onlyAllowNumber"
@@ -174,13 +185,22 @@ import { getConfig, updateConfig } from "@/apis/config";
 const list = ref<ConfigItem[]>(configList);
 const perviewList = ref<ConfigItem[]>([]);
 const onlyAllowNumber = (value: string) => !value || /^\d+$/.test(value);
-const message = useMessage();
+const notification = useNotification();
 const activeInput = ref<number>(-1);
 const addValue = (key: string) => {
-  if (key === "COMMAND_GROUPS" || key === "MESSAGE_GROUPS") {
-    perviewList.value.find((item) => item.key === key)?.value.push(0);
-  } else {
-    perviewList.value.find((item) => item.key === key)?.value.push("");
+  try {
+    if (key === "COMMAND_GROUPS" || key === "MESSAGE_GROUPS") {
+      perviewList.value.find((item) => item.key === key)?.value.push(0);
+    } else {
+      perviewList.value.find((item) => item.key === key)?.value.push("");
+    }
+  } catch (err) {
+    console.error(err);
+    notification.error({
+      content: "添加失败",
+      duration: 2000,
+      keepAliveOnHover: true,
+    });
   }
 };
 
@@ -202,7 +222,11 @@ const handleDefault = () => {
       value: item.value,
     };
   });
-  message.success("恢复默认配置成功");
+  notification.success({
+    content: "恢复默认配置成功",
+    duration: 2000,
+    keepAliveOnHover: true,
+  });
 };
 
 // 获取配置
@@ -223,7 +247,12 @@ const getConfigList = async () => {
     }
     perviewList.value = netConfigList;
   } else {
-    message.error("获取配置失败");
+    notification.error({
+      content: "获取配置失败",
+      meta: res.message,
+      duration: 2000,
+      keepAliveOnHover: true,
+    });
   }
 };
 
@@ -254,13 +283,28 @@ const saveConfig = async () => {
     // return
     const res = await updateConfig(dataInfo);
     if (res.success) {
-      message.success("保存成功");
+      notification.success({
+        content: "保存成功",
+        meta: res.message,
+        duration: 2000,
+        keepAliveOnHover: true,
+      });
       // getConfigList();
     } else {
-      message.error("保存失败");
+      notification.error({
+        content: "保存失败",
+        meta: res.message,
+        duration: 2000,
+        keepAliveOnHover: true,
+      });
     }
   } catch (err) {
-    console.log(err);
+    notification.error({
+      content: "保存失败",
+      meta: "未知错误",
+      duration: 2000,
+      keepAliveOnHover: true,
+    });
   }
 };
 </script>
