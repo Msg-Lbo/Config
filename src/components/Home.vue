@@ -261,21 +261,43 @@ const saveConfig = async () => {
   try {
     const dataInfo: Record<string, any> = {};
     perviewList.value.forEach((item: ConfigItem) => {
+      // 排除空值
+      if (item.value == "" || item.value == null || item.value == undefined) {
+        return;
+      }
       if (item.type === "int") {
         dataInfo[item.key] = parseInt(item.value);
       } else if (item.type === "array" && (item.key === "COMMAND_GROUPS" || item.key === "MESSAGE_GROUPS")) {
         let arr: number[] = [];
         item.value.forEach((value: string) => {
+          if (value == "" || value == null || value == undefined) {
+            return;
+          }
           arr.push(parseInt(value));
         });
         dataInfo[item.key] = arr;
       } else if (item.type === "array" && item.key === "SUPERUSERS") {
         let arr: string[] = [];
         item.value.forEach((value: string) => {
+          if (value == "" || value == null || value == undefined) {
+            return;
+          }
+          arr.push(value);
+        });
+        dataInfo[item.key] = arr;
+      } else if (item.type === "array") {
+        let arr: string[] = [];
+        item.value.forEach((value: string) => {
+          if (value == "" || value == null || value == undefined) {
+            return;
+          }
           arr.push(value);
         });
         dataInfo[item.key] = arr;
       } else {
+        if (item.value == "" || item.value == null || item.value == undefined) {
+          return;
+        }
         dataInfo[item.key] = item.value;
       }
     });
