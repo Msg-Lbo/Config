@@ -40,7 +40,7 @@ export default defineConfig({
         port: 5173,
         proxy: {
             '/webui/api': {
-                target: 'http://127.0.0.1:7897',
+                target: 'http://127.0.0.1:8000',
                 changeOrigin: true,
                 rewrite: function (path) { return path.replace(/^\/webui\/api/, ''); }
             }

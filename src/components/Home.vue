@@ -173,22 +173,50 @@
     </section>
     <n-space justify="end">
       <n-button class="mt-[10px]" type="warning" @click="handleDefault"> 恢复默认 </n-button>
+      <n-button class="mt-[10px]" type="success" @click="getConfigList"> 获取服务端配置 </n-button>
       <n-button class="mt-[10px]" type="success" @click="saveConfig"> 保存一下 </n-button>
     </n-space>
-
+    <n-float-button position="fixed" type="primary" :right="120" :bottom="120" menu-trigger="hover">
+      <n-icon>
+        <HamburgerButton />
+      </n-icon>
+      <template #menu>
+        <n-float-button>
+          <n-icon color="black" @click="toPath('https://github.com/Minecraft-QQBot/BotServer')">
+            <Github />
+          </n-icon>
+        </n-float-button>
+        <n-float-button>
+          <n-icon color="#88dedc" @click="toPath('https://qm.qq.com/q/4Y9kcrpczK')">
+            <TencentQq type="primary" />
+          </n-icon>
+        </n-float-button>
+        <n-float-button>
+          <n-icon color="#ff9900" @click="toPath('https://docs-qqbot.ylmty.cc')">
+            <DocumentFolder type="primary" />
+          </n-icon>
+        </n-float-button>
+        <n-float-button>
+          <n-icon :color="debug ? '#00EE00' : '#EE6363'" @click="switchDebug">
+            <Bug type="primary" />
+          </n-icon>
+        </n-float-button>
+      </template>
+    </n-float-button>
   </main>
 </template>
 
 <script setup lang="ts">
 import { configList, type ConfigItem } from "@/config/config";
 import { getConfig, updateConfig } from "@/apis/config";
-
+import { HamburgerButton, Github, TencentQq, DocumentFolder, Bug } from "@icon-park/vue-next";
 
 const list = ref<ConfigItem[]>(configList);
 const perviewList = ref<ConfigItem[]>([]);
 const onlyAllowNumber = (value: string) => !value || /^\d+$/.test(value);
 const notification = useNotification();
 const activeInput = ref<number>(-1);
+const debug = ref(localStorage.getItem("debug") === "true" ? true : false);
 const addValue = (key: string) => {
   try {
     if (key === "COMMAND_GROUPS" || key === "MESSAGE_GROUPS") {
@@ -214,6 +242,21 @@ onMounted(() => {
   getConfigList();
 });
 
+const toPath = (path: string) => {
+  window.open(path, "_blank");
+};
+
+const switchDebug = () => {
+  debug.value = !debug.value;
+  localStorage.setItem("debug", debug.value ? "true" : "false");
+  notification.success({
+    title: debug.value ? "Debug模式已开启" : "Debug模式已关闭",
+    content: "F12查看控制台日志",
+    duration: 2000,
+    keepAliveOnHover: true,
+  });
+};
+
 // 恢复默认配置
 const handleDefault = () => {
   perviewList.value = [];
@@ -235,6 +278,9 @@ const handleDefault = () => {
 const getConfigList = async () => {
   const res = await getConfig();
   if (res.success) {
+    if (debug.value) {
+      console.log("获取未格式化配置", res.data);
+    }
     // 将res.data转换为ConfigItem[]
     let netConfigList: ConfigItem[] = [];
     for (const key in res.data) {
@@ -248,6 +294,9 @@ const getConfigList = async () => {
       }
     }
     perviewList.value = netConfigList;
+    if (debug.value) {
+      console.log("获取格式化配置", perviewList.value);
+    }
   } else {
     notification.error({
       content: "获取配置失败",
@@ -265,6 +314,9 @@ const saveConfig = async () => {
     perviewList.value.forEach((item: ConfigItem) => {
       // 排除空值
       if (item.value == "" || item.value == null || item.value == undefined) {
+        if (debug.value) {
+          console.log("空值", { ...item });
+        }
         return;
       }
       if (item.type === "int") {
@@ -296,6 +348,8 @@ const saveConfig = async () => {
           arr.push(value);
         });
         dataInfo[item.key] = arr;
+      } else if (item.type === "bool") {
+        dataInfo[item.key] = item.value;
       } else {
         if (item.value == "" || item.value == null || item.value == undefined) {
           return;
@@ -303,7 +357,9 @@ const saveConfig = async () => {
         dataInfo[item.key] = item.value;
       }
     });
-    console.log("提交的数据:", dataInfo);
+    if (debug.value) {
+      console.log("保存配置", dataInfo);
+    }
     // return
     const res = await updateConfig(dataInfo);
     if (res.success) {
